@@ -19,7 +19,7 @@ public class LastSaleTransformer extends Transformer {
     private static final long serialVersionUID = -7325215370315061692L;
 
     private String productCol = "productid";
-    private String inputCol = "salesdate";
+    private String inputCol = "saledate";
     private String outputCol = "lastsale";
 
     @Override
