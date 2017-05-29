@@ -37,7 +37,7 @@ public class SalesCountTransformer extends Transformer {
     @Override
     public StructType transformSchema(StructType structType) {
         structType.add(outputCol, DataTypes.IntegerType);
-        return null;
+        return structType;
     }
 
     public String uid() {
