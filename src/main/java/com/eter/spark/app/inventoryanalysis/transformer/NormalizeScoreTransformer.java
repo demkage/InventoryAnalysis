@@ -8,6 +8,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 
+import static org.apache.spark.sql.functions.first;
 import static org.apache.spark.sql.functions.max;
 
 /**
@@ -19,7 +20,7 @@ public class NormalizeScoreTransformer extends Transformer {
     private String outputCol = "score";
     @Override
     public Dataset<Row> transform(Dataset<?> dataset) {
-        Integer maxScore = dataset.withColumn("maxScore", max(dataset.col(scoreCol)))
+        Integer maxScore = dataset.withColumn("maxScore", first(max(dataset.col(scoreCol))))
                 .select("maxScore").distinct().first().getInt(0);
 
         Dataset<Row> normalizedData = dataset.distinct()
