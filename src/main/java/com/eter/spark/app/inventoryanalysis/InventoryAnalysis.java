@@ -94,11 +94,9 @@ public class InventoryAnalysis {
 
         Dataset<Row> transformedDataset = dataTransformerPipeline.fit(dataset).transform(dataset);
 
-        transformedDataset.show(1000);
-
         PipelineModel pipelineModel = modelGenerator.fit(transformedDataset);
 
-        Dataset<Row> result = pipelineModel.transform(dataset);
+        Dataset<Row> result = pipelineModel.transform(transformedDataset);
         result.show();
 
     }
