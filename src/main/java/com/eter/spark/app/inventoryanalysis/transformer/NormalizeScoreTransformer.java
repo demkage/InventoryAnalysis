@@ -21,13 +21,8 @@ public class NormalizeScoreTransformer extends Transformer {
     private String outputCol = "score";
     @Override
     public Dataset<Row> transform(Dataset<?> dataset) {
-        Dataset<Row> normal = dataset
-                .withColumn("max(" + scoreCol + ")", max(dataset.col(scoreCol)));
 
-        normal = normal
-                .withColumn(outputCol, normal.col("max(" + scoreCol + ")").minus(normal.col(scoreCol)));
-
-        return normal;
+        return (Dataset<Row>) dataset;
     }
 
     @Override
