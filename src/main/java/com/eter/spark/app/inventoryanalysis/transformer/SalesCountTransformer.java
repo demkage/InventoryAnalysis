@@ -21,10 +21,10 @@ public class SalesCountTransformer extends Transformer {
     @Override
     public Dataset<Row> transform(Dataset<?> dataset) {
         Dataset<Row> salesCount = dataset.groupBy(dataset.col(inputCol))
-                .agg(dataset.col(inputCol), count(dataset.col(inputCol)).as(outputCol));
+                .count().as(outputCol);
 
-        salesCount = dataset.join(salesCount, salesCount.col(inputCol).equalTo(dataset.col(inputCol)))
-                .drop(salesCount.col(inputCol));
+//        salesCount = dataset.join(salesCount, salesCount.col(inputCol).equalTo(dataset.col(inputCol)))
+//                .drop(salesCount.col(inputCol));
 
         return salesCount;
     }
