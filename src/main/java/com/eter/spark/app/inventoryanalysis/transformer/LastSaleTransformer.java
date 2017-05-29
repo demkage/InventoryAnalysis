@@ -30,7 +30,7 @@ public class LastSaleTransformer extends Transformer {
 
         result = result.groupBy(result.col(productCol)).min(outputCol).withColumnRenamed("min(" + outputCol + ")", outputCol);
 
-        return dataset.join(result, dataset.col(inputCol).equalTo(result.col(outputCol)));
+        return dataset.join(result, dataset.col(inputCol).equalTo(result.col(inputCol)));
     }
 
     @Override
