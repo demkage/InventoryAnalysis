@@ -22,7 +22,9 @@ public class NormalizeScoreTransformer extends Transformer {
     @Override
     public Dataset<Row> transform(Dataset<?> dataset) {
         Dataset<Row> normal = dataset.groupBy(dataset.col(scoreCol))
-                .agg(dataset.col(scoreCol), max(dataset.col(scoreCol)))
+                .agg(dataset.col(scoreCol), max(dataset.col(scoreCol)));
+
+        normal = normal
                 .withColumn(outputCol, dataset.col("max(" + scoreCol + ")").minus(dataset.col(scoreCol)));
 
         return normal;
