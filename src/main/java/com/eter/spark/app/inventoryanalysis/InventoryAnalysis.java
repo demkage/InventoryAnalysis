@@ -88,7 +88,10 @@ public class InventoryAnalysis {
                         scoreTransformer, lastSaleEncoder, saleCountEnconder, vectorAssembler, lr
                 });
 
-        PipelineModel pipelineModel = modelGenerator.fit(dataset);
+
+        Dataset<Row> transformedDataset = dataTransformerPipeline.fit(dataset).transform(dataset);
+
+        PipelineModel pipelineModel = modelGenerator.fit(transformedDataset);
 
         Dataset<Row> result = pipelineModel.transform(dataset);
         result.show();
