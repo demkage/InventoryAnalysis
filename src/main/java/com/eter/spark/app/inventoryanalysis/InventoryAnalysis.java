@@ -5,6 +5,7 @@ import com.eter.spark.app.inventoryanalysis.transformer.SalesCountTransformer;
 import com.eter.spark.app.inventoryanalysis.transformer.ScoreTransformer;
 import org.apache.spark.ml.Model;
 import org.apache.spark.ml.Pipeline;
+import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.RandomForestClassifier;
 import org.apache.spark.ml.feature.OneHotEncoder;
@@ -87,6 +88,10 @@ public class InventoryAnalysis {
                         scoreTransformer, lastSaleEncoder, saleCountEnconder, vectorAssembler, lr
                 });
 
+        PipelineModel pipelineModel = modelGenerator.fit(dataset);
+
+        Dataset<Row> result = pipelineModel.transform(dataset);
+        result.show();
 
     }
 }
