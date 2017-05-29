@@ -2,6 +2,7 @@ package com.eter.spark.app.inventoryanalysis;
 
 import com.eter.spark.app.inventoryanalysis.transformer.LastSaleTransformer;
 import com.eter.spark.app.inventoryanalysis.transformer.SalesCountTransformer;
+import com.eter.spark.app.inventoryanalysis.transformer.ScoreTransformer;
 import org.apache.spark.ml.Model;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineStage;
@@ -60,6 +61,7 @@ public class InventoryAnalysis {
 
         LastSaleTransformer lastSaleTransformer = new LastSaleTransformer();
         SalesCountTransformer salesCountTransformer = new SalesCountTransformer();
+        ScoreTransformer scoreTransformer = new ScoreTransformer();
 
         Pipeline dataTransformerPipeline = new Pipeline()
                 .setStages(new PipelineStage[]{lastSaleTransformer, salesCountTransformer});
@@ -82,7 +84,7 @@ public class InventoryAnalysis {
 
         Pipeline modelGenerator = new Pipeline()
                 .setStages(new PipelineStage[] {
-                        lastSaleEncoder, saleCountEnconder, vectorAssembler, lr
+                        scoreTransformer, lastSaleEncoder, saleCountEnconder, vectorAssembler, lr
                 });
 
 
