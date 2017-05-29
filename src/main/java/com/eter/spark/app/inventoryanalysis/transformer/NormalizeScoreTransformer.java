@@ -22,7 +22,7 @@ public class NormalizeScoreTransformer extends Transformer {
 
     @Override
     public StructType transformSchema(StructType structType) {
-        return null;
+        return structType;
     }
 
     public String uid() {
