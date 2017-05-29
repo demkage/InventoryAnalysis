@@ -27,7 +27,10 @@ public class LastSaleTransformer extends Transformer {
         LocalDate currentDate = LocalDate.now();
         Dataset<Row> result = dataset
                 .withColumn(outputCol, datediff(current_date(), dataset.col(inputCol)));
-        return result.groupBy(result.col(productCol)).min(outputCol).withColumnRenamed("min(" + outputCol + ")", outputCol);
+
+        result = result.groupBy(result.col(productCol)).min(outputCol).withColumnRenamed("min(" + outputCol + ")", outputCol);
+
+        return dataset.join(result, dataset.col(inputCol).equalTo(result.col(outputCol)));
     }
 
     @Override
