@@ -21,7 +21,7 @@ public class NormalizeScoreTransformer extends Transformer {
     @Override
     public Dataset<Row> transform(Dataset<?> dataset) {
         Integer maxScore = dataset.groupBy(dataset.col(scoreCol)).agg(dataset.col(scoreCol), max(dataset.col(scoreCol)))
-                .select("max").distinct().first().getInt(0);
+                .select("max(" + scoreCol + ")").distinct().first().getInt(0);
 
         Dataset<Row> normalizedData = dataset.distinct()
                                         .withColumn(outputCol, dataset.col(scoreCol).$minus(maxScore));
