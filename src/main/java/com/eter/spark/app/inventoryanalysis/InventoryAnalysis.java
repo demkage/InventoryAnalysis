@@ -68,7 +68,7 @@ public class InventoryAnalysis {
                 .setStages(new PipelineStage[]{lastSaleTransformer, salesCountTransformer});
 
         OneHotEncoder lastSaleEncoder = new OneHotEncoder()
-                .setInputCol("lastSale")
+                .setInputCol("lastsale")
                 .setOutputCol("lastSaleVec");
 
         OneHotEncoder saleCountEnconder = new OneHotEncoder()
