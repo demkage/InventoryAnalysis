@@ -1,6 +1,7 @@
 package com.eter.spark.app.inventoryanalysis;
 
 import com.eter.spark.app.inventoryanalysis.transformer.LastSaleTransformer;
+import com.eter.spark.app.inventoryanalysis.transformer.NormalizeScoreTransformer;
 import com.eter.spark.app.inventoryanalysis.transformer.SalesCountTransformer;
 import com.eter.spark.app.inventoryanalysis.transformer.ScoreTransformer;
 import org.apache.spark.ml.Model;
@@ -63,9 +64,11 @@ public class InventoryAnalysis {
         LastSaleTransformer lastSaleTransformer = new LastSaleTransformer();
         SalesCountTransformer salesCountTransformer = new SalesCountTransformer();
         ScoreTransformer scoreTransformer = new ScoreTransformer();
+        NormalizeScoreTransformer normalizeScore = new NormalizeScoreTransformer();
 
         Pipeline dataTransformerPipeline = new Pipeline()
-                .setStages(new PipelineStage[]{lastSaleTransformer, salesCountTransformer, scoreTransformer});
+                .setStages(new PipelineStage[]{lastSaleTransformer, salesCountTransformer, scoreTransformer,
+                 normalizeScore });
 
         OneHotEncoder lastSaleEncoder = new OneHotEncoder()
                 .setInputCol("lastsale")
@@ -90,7 +93,8 @@ public class InventoryAnalysis {
 
 
         Dataset<Row> transformedDataset = dataTransformerPipeline.fit(dataset).transform(dataset);
-        transformedDataset.show();
+
+        transformedDataset.show(1000);
 
 //        PipelineModel pipelineModel = modelGenerator.fit(transformedDataset);
 //

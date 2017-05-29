@@ -15,7 +15,7 @@ public class ScoreTransformer extends Transformer {
     private String salesCountCol = "sales";
     private String lastSaleCol = "lastsale";
 
-    private String outputCol = "score";
+    private String outputCol = "baseScore";
 
 
     @Override
