@@ -65,7 +65,7 @@ public class InventoryAnalysis {
         ScoreTransformer scoreTransformer = new ScoreTransformer();
 
         Pipeline dataTransformerPipeline = new Pipeline()
-                .setStages(new PipelineStage[]{lastSaleTransformer, salesCountTransformer});
+                .setStages(new PipelineStage[]{lastSaleTransformer, salesCountTransformer, scoreTransformer});
 
         OneHotEncoder lastSaleEncoder = new OneHotEncoder()
                 .setInputCol("lastsale")
@@ -85,16 +85,17 @@ public class InventoryAnalysis {
 
         Pipeline modelGenerator = new Pipeline()
                 .setStages(new PipelineStage[] {
-                        scoreTransformer, lastSaleEncoder, saleCountEnconder, vectorAssembler, lr
+                        lastSaleEncoder, saleCountEnconder, vectorAssembler, lr
                 });
 
 
         Dataset<Row> transformedDataset = dataTransformerPipeline.fit(dataset).transform(dataset);
+        transformedDataset.show();
 
-        PipelineModel pipelineModel = modelGenerator.fit(transformedDataset);
-
-        Dataset<Row> result = pipelineModel.transform(dataset);
-        result.show();
+//        PipelineModel pipelineModel = modelGenerator.fit(transformedDataset);
+//
+//        Dataset<Row> result = pipelineModel.transform(dataset);
+//        result.show();
 
     }
 }
