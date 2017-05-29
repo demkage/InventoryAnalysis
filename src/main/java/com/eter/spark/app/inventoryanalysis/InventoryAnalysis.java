@@ -20,6 +20,8 @@ import org.apache.spark.sql.SparkSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 /**
  * Created by abosii on 5/24/2017.
  */
@@ -28,7 +30,7 @@ public class InventoryAnalysis {
     private static final Logger log = LoggerFactory.getLogger(InventoryAnalysis.class);
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length < 1) {
             log.error("Can't find argument for model output");
             log.debug("Actual arguments length: " + args.length);
@@ -96,8 +98,6 @@ public class InventoryAnalysis {
 
         PipelineModel pipelineModel = modelGenerator.fit(transformedDataset);
 
-        Dataset<Row> result = pipelineModel.transform(transformedDataset);
-        result.show();
-
+        pipelineModel.save(output);
     }
 }
