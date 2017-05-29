@@ -96,10 +96,10 @@ public class InventoryAnalysis {
 
         transformedDataset.show(1000);
 
-//        PipelineModel pipelineModel = modelGenerator.fit(transformedDataset);
-//
-//        Dataset<Row> result = pipelineModel.transform(dataset);
-//        result.show();
+        PipelineModel pipelineModel = modelGenerator.fit(transformedDataset);
+
+        Dataset<Row> result = pipelineModel.transform(dataset);
+        result.show();
 
     }
 }
