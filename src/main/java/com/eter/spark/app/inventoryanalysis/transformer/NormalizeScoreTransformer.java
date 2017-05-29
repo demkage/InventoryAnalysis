@@ -17,15 +17,15 @@ import static org.apache.spark.sql.functions.max;
 public class NormalizeScoreTransformer extends Transformer {
     private static final long serialVersionUID = 6045677004593190401L;
     private String scoreCol = "baseScore";
+    private String productCol = "productid";
     private String outputCol = "score";
     @Override
     public Dataset<Row> transform(Dataset<?> dataset) {
-        Long maxScore = dataset.groupBy(dataset.col(scoreCol)).agg(dataset.col(scoreCol), max(dataset.col(scoreCol)))
-                .select("max(" + scoreCol + ")").distinct().first().getLong(0);
+        Dataset<Row> normal = dataset.groupBy(dataset.col(productCol))
+                .agg(dataset.col(scoreCol), max(dataset.col(scoreCol)))
+                .withColumn(outputCol, dataset.col("max(" + scoreCol + ")").minus(dataset.col(scoreCol)));
 
-        Dataset<Row> normalizedData = dataset.distinct()
-                                        .withColumn(outputCol, dataset.col(scoreCol).$minus(maxScore));
-        return normalizedData;
+        return normal;
     }
 
     @Override

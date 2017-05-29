@@ -21,7 +21,7 @@ public class ScoreTransformer extends Transformer {
     @Override
     public Dataset<Row> transform(Dataset<?> dataset) {
         return dataset.withColumn(outputCol,
-                dataset.col(salesCountCol).multiply(dataset.col(lastSaleCol)));
+                dataset.col(salesCountCol).divide(dataset.col(lastSaleCol).plus(1)));
 
     }
 
