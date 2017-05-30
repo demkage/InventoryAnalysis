@@ -82,7 +82,7 @@ public class InventoryAnalysis {
 //                .setOutputCol("salesVec");
 
         RFormula rFormula = new RFormula()
-                .setFormula("score ~ lastSale + sales")
+                .setFormula("score ~ lastsale + sales")
                 .setFeaturesCol("features")
                 .setLabelCol("score");
 //
