@@ -10,6 +10,7 @@ import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.RandomForestClassifier;
 import org.apache.spark.ml.feature.OneHotEncoder;
+import org.apache.spark.ml.feature.RFormula;
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.regression.LinearRegression;
 import org.apache.spark.ml.regression.LinearRegressionModel;
@@ -72,17 +73,22 @@ public class InventoryAnalysis {
                 .setStages(new PipelineStage[]{lastSaleTransformer, salesCountTransformer, scoreTransformer,
                  normalizeScore });
 
-        OneHotEncoder lastSaleEncoder = new OneHotEncoder()
-                .setInputCol("lastsale")
-                .setOutputCol("lastSaleVec");
+//        OneHotEncoder lastSaleEncoder = new OneHotEncoder()
+//                .setInputCol("lastsale")
+//                .setOutputCol("lastSaleVec");
+//
+//        OneHotEncoder saleCountEnconder = new OneHotEncoder()
+//                .setInputCol("sales")
+//                .setOutputCol("salesVec");
 
-        OneHotEncoder saleCountEnconder = new OneHotEncoder()
-                .setInputCol("sales")
-                .setOutputCol("salesVec");
-
-        VectorAssembler vectorAssembler = new VectorAssembler()
-                .setInputCols(new String[] {"lastSaleVec", "salesVec"})
-                .setOutputCol("features");
+        RFormula rFormula = new RFormula()
+                .setFormula("score ~ lastSale + sales")
+                .setFeaturesCol("features")
+                .setLabelCol("score");
+//
+//        VectorAssembler vectorAssembler = new VectorAssembler()
+//                .setInputCols(new String[] {"lastSaleVec", "salesVec"})
+//                .setOutputCol("features");
 
         LinearRegression lr = new LinearRegression()
                 .setLabelCol("score")
@@ -90,13 +96,17 @@ public class InventoryAnalysis {
 
         Pipeline modelGenerator = new Pipeline()
                 .setStages(new PipelineStage[] {
-                        lastSaleEncoder, saleCountEnconder, vectorAssembler, lr
+                        rFormula, lr
                 });
 
 
         Dataset<Row> transformedDataset = dataTransformerPipeline.fit(dataset).transform(dataset);
 
         PipelineModel pipelineModel = modelGenerator.fit(transformedDataset);
+
+        Dataset<Row> test = pipelineModel.transform(transformedDataset);
+
+        test.show();
 
         pipelineModel.save(output);
     }
